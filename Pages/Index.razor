@@ -1,0 +1,42 @@
+﻿@page "/"
+@inherits IndexBase 
+<h3>Test</h3>
+
+<div>
+    <button type="button" class="btn btn-sm btn-primary " @onclick="@InsertRow"><i class="bi bi-plus-circle" aria-hidden="true"></i></button>
+</div>
+<RadzenDataGrid @ref="EmployeeGrid" EditMode="Radzen.DataGridEditMode.Single" AllowColumnResize="true"
+                Data="@EmployeeList" TItem="Employee"
+                RowUpdate="@OnUpdateRow"
+                RowCreate="@OnCreateRow">
+    <Columns>
+        <RadzenDataGridColumn Width="40px" TItem="Employee" Property="Id" />
+        <RadzenDataGridColumn Width="40px" TItem="Employee" Property="FirstName" />
+        <RadzenDataGridColumn Width="40px" TItem="Employee" Property="LastName" />
+        <RadzenDataGridColumn TItem="Employee" Context="employee" Property="Notes" Title="Notes" Width="500px">
+            <Template>
+                @((MarkupString)$"<div style=\"white-space:pre-wrap\">{employee.Notes}</div>")
+            </Template>
+            <EditTemplate>
+                <TinyMCE.Blazor.Editor Field="() => employee.Notes" @bind-Value="@employee.Notes" Conf="@Constants.TinyMceConfig" id="Notes" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn TItem="Employee" Context="employee" Filterable="false" Sortable="false" Width="100px">
+            <Template>
+                <button class="btn btn-success btn-sm" type="button"  @onclick="(args => EditRow(employee))" 
+                        data-toggle="tooltip" data-placement="top" title="Edit"><i class="bi bi-pencil-square"></i></button>
+            </Template>
+            <EditTemplate>
+                <button class="btn btn-primary btn-sm" type="button"  @onclick="@((args) => SaveRow(employee))" 
+                        data-toggle="tooltip" data-placement="top" title="Save"><i class="bi bi-save"></i></button>
+                <button class="btn btn-secondary btn-sm" type="button"  @onclick="@((args) => CancelEdit(employee))" 
+                        data-toggle="tooltip" data-placement="top" title="Cancel"><i class="bi bi-x-square"></i></button>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code{
+    
+}
